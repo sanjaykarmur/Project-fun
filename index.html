@@ -1,26 +1,88 @@
 <!DOCTYPE html>
 <html>
-<body style="text-align:center;margin-top:50px;font-family:sans-serif">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+button, a {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  border: none;
+}
+
+button {
+  background: #007bff;
+  color: white;
+}
+
+#wa {
+  background: #25D366;
+  color: white;
+}
+
+#call {
+  background: #28a745;
+  color: white;
+}
+
+#num {
+  font-size: 20px;
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
 
 <h2>Contact Me</h2>
 
 <button onclick="reveal()">Tap to Reveal Number</button>
 
-<p id="num" style="display:none;font-size:20px;">
+<p id="num" style="display:none;">
   +91 9510389983
 </p>
-
-<br><br>
 
 <a id="wa" target="_blank" style="display:none;">
   Chat on WhatsApp
 </a>
 
-<br><br>
-
 <a id="call" style="display:none;">
   Call Now
 </a>
+
+</div>
 
 <script>
 async function reveal() {
@@ -55,11 +117,11 @@ Time: ${new Date().toLocaleString()}`;
 
   document.getElementById("wa").href =
     "https://wa.me/919510389983";
-  document.getElementById("wa").style.display = "inline";
+  document.getElementById("wa").style.display = "block";
 
   document.getElementById("call").href =
     "tel:9510389983";
-  document.getElementById("call").style.display = "inline";
+  document.getElementById("call").style.display = "block";
 }
 </script>
 
